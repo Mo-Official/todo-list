@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Todo List</title>
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				font-family: Verdana, Geneva, Tahoma, sans-serif;
+			}
+
+			.list-container {
+				background: #f9f9f9;
+				box-shadow: 6px 6px 20px 0px #00000033;
+				border-radius: 7px;
+				width: 500px;
+				margin: 20px 20px;
+				padding: 20px 20px;
+			}
+
+			.list-item {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				justify-content: space-between;
+				box-shadow: 1px 1px 1px 0px #00000015;
+				border: 1px rgba(0, 0, 0, 0.086) solid;
+				border-radius: 7px;
+				margin: 20px 20px;
+				padding: 20px 20px;
+				align-items: center;
+			}
+
+			.list-item-left {
+				font-size: medium;
+				width: 190px;
+			}
+
+			.list-item-right {
+			}
+
+			button {
+				width: 100px;
+				height: 40px;
+			}
+
+			.btn-green {
+				background: rgb(75, 180, 75);
+				color: white;
+				border: none;
+				border-radius: 7px;
+				cursor: pointer;
+			}
+
+			.btn-red {
+				background: red;
+				color: white;
+				border: none;
+				border-radius: 7px;
+				cursor: pointer;
+			}
+			.list-container-footer {
+				display: flex;
+				justify-content: space-around;
+			}
+			.list-container-footer-btn {
+				width: 100%;
+				background: rgb(75, 180, 75);
+				color: white;
+				border: none;
+				border-radius: 7px;
+				cursor: pointer;
+			}
+
+			.title-input {
+				height: 40px;
+				padding-left: 10px;
+				font-size: medium;
+				width: 190px;
+			}
+		</style>
+
+		<script>
+			function replaceTaskWithForm(taskElement, id, currentValue) {
+				// Get the template
+				const template = document.getElementById("editable-task-template");
+
+				// Clone the template content
+				const newTaskElement = template.content.cloneNode(true);
+
+				// Modify the cloned content (e.g., setting id and input values)
+				const newLi = newTaskElement.querySelector("li");
+				newLi.id = taskElement.id;
+				newTaskElement.querySelector("#title").value = currentValue;
+
+				// Replace the old task element with the new one
+				taskElement.replaceWith(newLi);
+			}
+
+			function handleOnEditClick() {
+				let parent_node = event.currentTarget.parentNode.parentNode;
+				let title_node = document.getElementById(parent_node.id + "-t");
+				replaceTaskWithForm(parent_node, title_node.nodeValue);
+			}
+
+			function updateTask(id) {}
+
+			function handleOnConfirmEditClick() {}
+
+			function handleOnDeleteClick() {}
+
+			function handleOnAddClick() {}
+		</script>
+	</head>
+
+	<body>
+		<ol class="list-container">
+			<h1>My Todo List</h1>
+			<li
+				class="list-item"
+				id="1"
+			>
+				<div
+					class="list-item-left"
+					id="1-t"
+				>
+					Task
+				</div>
+				<div class="list-item-right">
+					<button
+						class="btn-green"
+						onclick="handleOnEditClick()"
+					>
+						Edit
+					</button>
+					<button
+						class="btn-red"
+						onclick="handleOnDeleteClick()"
+					>
+						Delete
+					</button>
+				</div>
+			</li>
+			<li
+				class="list-item"
+				id="1"
+			>
+				<div
+					class="list-item-left"
+					id="1-t"
+				>
+					Task
+				</div>
+				<div class="list-item-right">
+					<button
+						class="btn-green"
+						onclick="handleOnEditClick()"
+					>
+						Edit
+					</button>
+					<button
+						class="btn-red"
+						onclick="handleOnDeleteClick()"
+					>
+						Delete
+					</button>
+				</div>
+			</li>
+			<li
+				class="list-item"
+				id="1"
+			>
+				<div
+					class="list-item-left"
+					id="1-t"
+				>
+					Task
+				</div>
+				<div class="list-item-right">
+					<button
+						class="btn-green"
+						onclick="handleOnEditClick()"
+					>
+						Edit
+					</button>
+					<button
+						class="btn-red"
+						onclick="handleOnDeleteClick()"
+					>
+						Delete
+					</button>
+				</div>
+			</li>
+
+			<div class="list-container-footer">
+				<button
+					class="list-container-footer-btn"
+					onclick="handleOnAddClick()"
+				>
+					Add Task +
+				</button>
+			</div>
+		</ol>
+	</body>
+	<template id="editable-task-template">
+		<li class="list-item">
+			<div class="list-item-left">
+				<form method="post">
+					<input
+						type="text"
+						name="id"
+						id="id"
+						hidden
+					/>
+					<input
+						class="title-input"
+						type="text"
+						name="title"
+						id="title"
+						value=""
+					/>
+				</form>
+			</div>
+			<div class="list-item-right">
+				<button
+					class="btn-green"
+					onclick="handleOnConfirmEditClick()"
+				>
+					Confirm
+				</button>
+				<button
+					class="btn-red"
+					onclick="handleOnDeleteClick()"
+				>
+					Cancel
+				</button>
+			</div>
+		</li>
+	</template>
+</html>
