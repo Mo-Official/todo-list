@@ -10,21 +10,25 @@ def update_csv_row_num():
         global csv_row_num
         csv_row_num = len(fh.readlines())
         
-def update_task(id, value):
+def update_task_db(id, value):
     lines = []
     with open(csv_path) as fh:
         lines : list[str] = fh.readlines()
         for i in range(len(lines)):
-            parsed_line = lines[i].split(";")
-            if parsed_line[0] == str(id):
-                parsed_line[1] = value +"\n"
-            lines[i] = ";".join(parsed_line)
+            try:
+                parsed_line = lines[i].split(";")
+                if parsed_line[0] == str(id):
+                    parsed_line[1] = value +"\n"
+                lines[i] = ";".join(parsed_line)
+            except ValueError:
+                continue
+                
         global csv_row_num
         csv_row_num = len(lines)
     with open(csv_path, "w") as fh:
         fh.writelines(lines)
     
-def add_task(value):
+def insert_task_db(value):
     global csv_row_num
     if csv_row_num == 0:
         update_csv_row_num()
@@ -32,7 +36,7 @@ def add_task(value):
     with open(csv_path, "a") as fh:
         fh.write(f"\n{csv_row_num};{value}")
 
-def delete_task(id):
+def delete_task_db(id):
     global csv_row_num
     if csv_row_num == 0:
         update_csv_row_num()
@@ -48,6 +52,7 @@ def delete_task(id):
                 break
             
     with open(csv_path, "w") as fh:
+        lines[-1].removesuffix("\n")
         fh.writelines(lines)
 
 def get_task(id):
@@ -63,8 +68,11 @@ def get_tasks(search):
             lines =  fh.readlines()
             tasks = []
             for line in lines:
-                v1, v2 = line.split(";")
-                tasks.append((v1, v2))
+                try:
+                    v1, v2 = line.split(";")
+                    tasks.append((v1, v2))
+                except ValueError:
+                    continue
             return tasks
         return []
     
@@ -72,13 +80,22 @@ def get_tasks(search):
 @app.route("/", methods=["GET"])
 def index():
     tasks = get_tasks("*")
-    print(tasks)
     return render_template("index.html", tasks=tasks)
 
-@app.route("/add", methods=['POST'])
-def add_task():
-    value = request.form.get("title")
-    add_task(value)
+@app.route("/add")
+def insert_task_ep():
+    value = request.form.get("title", "New Title")
+    insert_task_db(value)
+    return redirect(url_for("index"))
+
+@app.route("/delete/<id>")
+def delete_task_ep(id):
+    delete_task_db(id)
+    return redirect(url_for("index"))
+
+@app.route("/update/<id>", methods=["POST"], )
+def update_task_ep(id):
+    update_task_db(id, request.json["value"])
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
