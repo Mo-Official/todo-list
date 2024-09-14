@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 import csv
 
 app = Flask(__name__, template_folder="./templates")
@@ -55,15 +55,31 @@ def get_task(id):
         line = fh.readline().split(";")
         while line[0] != str(id):
             line = fh.readline().split(";")
-        return line
+        return (line[0], line[1].strip())
+
+def get_tasks(search):
+    with open(csv_path) as fh:
+        if search == "*":
+            lines =  fh.readlines()
+            tasks = []
+            for line in lines:
+                v1, v2 = line.split(";")
+                tasks.append((v1, v2))
+            return tasks
+        return []
+    
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    tasks = get_tasks("*")
+    print(tasks)
+    return render_template("index.html", tasks=tasks)
 
 @app.route("/add", methods=['POST'])
 def add_task():
-    pass
+    value = request.form.get("title")
+    add_task(value)
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run("", debug=True)

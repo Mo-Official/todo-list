@@ -112,55 +112,15 @@
 		<div class="app-container">
 			<ol class="list-container">
 				<h1>My Todo List</h1>
+
+				{% for task in tasks %}
 				<li
 					class="list-item"
-					id="1">
+					id="{{task[0]}}">
 					<div
 						class="list-item-left"
 						id="1-t">
-						Task
-					</div>
-					<div class="list-item-right">
-						<button
-							class="btn-green"
-							onclick="handleOnEditClick()">
-							Edit
-						</button>
-						<button
-							class="btn-red"
-							onclick="handleOnDeleteClick()">
-							Delete
-						</button>
-					</div>
-				</li>
-				<li
-					class="list-item"
-					id="1">
-					<div
-						class="list-item-left"
-						id="1-t">
-						Task
-					</div>
-					<div class="list-item-right">
-						<button
-							class="btn-green"
-							onclick="handleOnEditClick()">
-							Edit
-						</button>
-						<button
-							class="btn-red"
-							onclick="handleOnDeleteClick()">
-							Delete
-						</button>
-					</div>
-				</li>
-				<li
-					class="list-item"
-					id="1">
-					<div
-						class="list-item-left"
-						id="1-t">
-						Task
+						{{task[1]}}
 					</div>
 					<div class="list-item-right">
 						<button
@@ -176,6 +136,8 @@
 					</div>
 				</li>
 
+				{% endfor %}
+				
 				<div class="list-container-footer">
 					<button
 						class="list-container-footer-btn"
