@@ -52,7 +52,8 @@ def delete_task_db(id):
                 break
             
     with open(csv_path, "w") as fh:
-        lines[-1].removesuffix("\n")
+        if len(lines) > 0:
+            lines[-1].removesuffix("\n")
         fh.writelines(lines)
 
 def get_task(id):
