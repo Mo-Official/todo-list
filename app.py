@@ -13,6 +13,11 @@ def index():
     return render_template("index.html", tasks=tasks)
 
 
+@app.route("/tasks")
+def get_tasks_ep():
+    return {"tasks": conn.get_tasks()}
+
+
 @app.route("/add")
 def insert_task_ep():
     value = request.form.get("title", "New Title")
