@@ -4,7 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta
 			name="viewport"
-			content="width=device-width, initial-scale=1.0" />
+			content="width=device-width, initial-scale=1.0"
+		/>
 		<title>Todo List</title>
 
 		<style>
@@ -86,7 +87,7 @@
 			}
 			.list-container-footer-btn {
 				width: 100%;
-				background:  rgb(60, 141, 60); 
+				background: rgb(60, 141, 60);
 				color: white;
 				border: none;
 				border-radius: 7px;
@@ -102,21 +103,21 @@
 		</style>
 
 		<script>
-		async function handleOnEditClick(id) {
-				var element = document.getElementById(id+"-t");
+			async function handleOnEditClick(id) {
+				var element = document.getElementById(id + "-t");
 				var url = `{{url_for('update_task_ep', id='')}}` + id;
 				try {
-					body = JSON.stringify({value: element.value})
+					body = JSON.stringify({ value: element.value });
 					const response = await fetch(url, {
 						method: "POST",
-						headers: { "Content-Type": "application/json"},
-						"body": body
+						headers: { "Content-Type": "application/json" },
+						body: body,
 					});
 					if (!response.ok) {
 						throw new Error(`Response status ${response.status}`);
 					}
-				} catch ( error) {
-					console.error(error.message)
+				} catch (error) {
+					console.error(error.message);
 				}
 			}
 
@@ -124,9 +125,7 @@
 
 			function handleOnConfirmEditClick() {}
 
-			function handleOnDeleteClick() {
-
-			}
+			function handleOnDeleteClick() {}
 
 			function handleOnAddClick() {}
 		</script>
@@ -140,53 +139,80 @@
 				{% for task in tasks %}
 				<li
 					class="list-item"
-					id="{{task[0]}}">
-					<input
-						
-						type="text"
-						class="list-item-title"
-						id="{{task[0]}}-t"
-						value="{{task[1]}}">
-						
-					
+					id="{{task[0]}}"
+				>
+					<ul>
+						<li>
+							<input
+								type="text"
+								class="list-item-title"
+								id="{{task[0]}}-t"
+								value="{{task[1]}}"
+								onchange="handleOnEditClick('{{task[0]}}')"
+							/>
+						</li>
+
+						{% for attachment in attachments[task[0]] %}
+
+						<li><button>{{attachment}}</button> <button>X</button></li>
+						{% endfor %}
+					</ul>
+
 					<div class="list-item-right">
-						<button
-							class="btn-green"
-							onclick="handleOnEditClick('{{task[0]}}')">
-							Save
-						</button>
-						<form action="{{url_for('delete_task_ep', id=task[0])}}" method="GET" style="display: contents;">
-							<button type="submit"
-							class="btn-red"
-							onclick="handleOnDeleteClick()">
-							Delete
-						</button>
+						<form
+							action=""
+							method="GET"
+							style="display: contents"
+						>
+							<button
+								type="submit"
+								class="btn-red"
+							>
+								Upload
+							</button>
+						</form>
+						<form
+							action="{{url_for('delete_task_ep', id=task[0])}}"
+							method="GET"
+							style="display: contents"
+						>
+							<button
+								type="submit"
+								class="btn-red"
+							>
+								Delete
+							</button>
 						</form>
 					</div>
 				</li>
 
-				{% endfor %}
-				
-				{% if tasks|length == 0 %}
-				<p class="list-container-empty">
-					No tasks currently...
-				</p>
+				{% endfor %} {% if tasks|length == 0 %}
+				<p class="list-container-empty">No tasks currently...</p>
 				{% endif %}
 
 				<div class="list-container-footer">
-					<form action="{{url_for('insert_task_ep')}}" method="get" style="display: contents;">
-						<input type="text" value="New Task" hidden name="title" id="title">
+					<form
+						action="{{url_for('insert_task_ep')}}"
+						method="get"
+						style="display: contents"
+					>
+						<input
+							type="text"
+							value="New Task"
+							hidden
+							name="title"
+							id="title"
+						/>
 						<button
-						class="list-container-footer-btn"
-						onclick="handleOnAddClick()"
-						type="submit">
-						Add Task +
-					</button>
+							class="list-container-footer-btn"
+							onclick="handleOnAddClick()"
+							type="submit"
+						>
+							Add Task +
+						</button>
 					</form>
-					
 				</div>
 			</ol>
 		</div>
-
 	</body>
 </html>
