@@ -1,0 +1,9 @@
+FROM postgres:latest
+
+COPY *.sql /docker-entrypoint-initdb.d/
+
+ENV POSTGRES_DB=tasksdb
+ENV POSTGRES_USER=azureuser
+ENV POSTGRES_PASSWORD=cloudobservation
+
+EXPOSE 5432
