@@ -5,6 +5,7 @@ from util.postgreUtils import PostgreConnector
 
 app = Flask(__name__, template_folder="./templates")
 conn = PostgreConnector("database.ini")
+storage_path = "./storage/"
 
 
 @app.route("/", methods=["GET"])
@@ -40,6 +41,13 @@ def delete_task_ep(id):
 )
 def update_task_ep(id):
     conn.update_task(id, request.json["value"])
+    return redirect(url_for("index"))
+
+
+@app.route("/upload-attachment/<id>", methods=["POST"])
+def upload_attachment(id):
+    file = request.files["file"]
+    file.save(storage_path + file.filename)
     return redirect(url_for("index"))
 
 
