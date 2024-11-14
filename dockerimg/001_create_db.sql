@@ -1,14 +1,13 @@
 CREATE TABLE Tasks (
         id SERIAL PRIMARY KEY,
+        username TEXT,
         title TEXT
+        CONSTRAINT username_fk
+        FOREIGN KEY(username) 
+                REFERENCES Users(username)
 );
 
-/* CREATE TABLE Attachments (
-        id SERIAL PRIMARY KEY,
-        name TEXT,
-        hashedName TEXT,
-                
-        CONSTRAINT fk_task
-         FOREIGN KEY(task_id) 
-          REFERENCES Tasks(id)
-) */
+CREATE TABLE Users (
+        username TEXT PRIMARY KEY,
+        password TEXT
+)
